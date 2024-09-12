@@ -10,9 +10,9 @@ const router = express.Router();
 router.post('/signUp', async (req, res, next) => {
     try {
         const { account, password, confirmPassword, name } = req.body;
-        const isExistUser = await userDataClient.user.findFirst({
+        const isExistUser = await userDataClient.account.findFirst({
             where: {
-                user,
+                account,
             },
         });
 
@@ -38,9 +38,9 @@ router.post('/signUp', async (req, res, next) => {
                 message: '비밀번호와 비밀번호 확인이 일치하지 않습니다.',
             });
 
-        const user = await userDataClient.user.create({
+        const user = await userDataClient.account.create({
             data: {
-                user,
+                account,
                 password: hashedPassword,
                 name,
             },
@@ -63,9 +63,9 @@ router.post('/signUp', async (req, res, next) => {
 router.post('/signIn', async (req, res, next) => {
     try {
         const { account, password } = req.body;
-        const user = await userDataClient.user.findFirst({
+        const user = await userDataClient.account.findFirst({
             where: {
-                user,
+                account,
             },
         });
         console.log(user);

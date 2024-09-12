@@ -14,14 +14,14 @@ datasource userDb {
   url      = env("DATABASE_URL2")
 }
 
-model User {
+model Account {
   id Int @id @default(autoincrement())
   account String @unique @map("account")
   name String @map("name")
   password String @map("password")
   
   characters Character[]
-  @@map("user")
+  @@map("account")
 }
 
 model Character {
@@ -31,7 +31,7 @@ model Character {
   power Int @default(100)
   money Int @default(10000)
   accountId Int @map("account_id")
-  account User @relation(fields: [accountId], references: [id])
+  account Account @relation(fields: [accountId], references: [id])
   characterInventory CharacterInventory[]
   characterItem CharacterItem[]
   @@map("characters")
