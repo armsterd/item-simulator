@@ -1,0 +1,58 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "./generated/gameDataClient"
+}
+
+datasource userDb {
+  provider = "mysql"
+  url      = env("DATABASE_URL2")
+}
+
+model User {
+  id       Int    @id @default(autoincrement())
+  account  String @unique @map("account")
+  name     String @map("name")
+  password String @map("password")
+
+  characters Character[]
+
+  @@map("user")
+}
+
+model Character {
+  id                 Int                  @id @default(autoincrement())
+  name               String               @unique
+  health             Int                  @default(500)
+  power              Int                  @default(100)
+  money              Int                  @default(10000)
+  accountId          Int                  @map("account_id")
+  account            User                 @relation(fields: [accountId], references: [id])
+  characterInventory CharacterInventory[]
+  characterItem      CharacterItem[]
+
+  @@map("characters")
+}
+
+model CharacterInventory {
+  id          Int       @id @default(autoincrement())
+  characterId Int
+  itemId      Int       @map("item_id")
+  character   Character @relation(fields: [characterId], references: [id])
+
+  @@map("character_inventory")
+}
+
+model CharacterItem {
+  id          Int       @id @default(autoincrement())
+  characterId Int
+  itemId      Int
+  character   Character @relation(fields: [characterId], references: [id])
+
+  @@map("character_item")
+}
